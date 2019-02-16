@@ -901,13 +901,8 @@ public class BooleanUtils {
      * @since 3.0.1
      */
     public static boolean and(final boolean... array) {
-        // Validates input
-        if (array == null) {
-            throw new IllegalArgumentException("The Array must not be null");
-        }
-        if (array.length == 0) {
-            throw new IllegalArgumentException("Array is empty");
-        }
+        validatesArrayInput(array);
+
         for (final boolean element : array) {
             if (!element) {
                 return false;
@@ -936,18 +931,9 @@ public class BooleanUtils {
      * @since 3.0.1
      */
     public static Boolean and(final Boolean... array) {
-        if (array == null) {
-            throw new IllegalArgumentException("The Array must not be null");
-        }
-        if (array.length == 0) {
-            throw new IllegalArgumentException("Array is empty");
-        }
-        try {
-            final boolean[] primitive = ArrayUtils.toPrimitive(array);
-            return and(primitive) ? Boolean.TRUE : Boolean.FALSE;
-        } catch (final NullPointerException ex) {
-            throw new IllegalArgumentException("The array must not contain any null elements");
-        }
+        validatesArrayInput(array);
+        final boolean[] primitive = toPrimitive(array);
+        return and(primitive) ? Boolean.TRUE : Boolean.FALSE;
     }
 
     /**
@@ -969,13 +955,8 @@ public class BooleanUtils {
      * @since 3.0.1
      */
     public static boolean or(final boolean... array) {
-        // Validates input
-        if (array == null) {
-            throw new IllegalArgumentException("The Array must not be null");
-        }
-        if (array.length == 0) {
-            throw new IllegalArgumentException("Array is empty");
-        }
+        validatesArrayInput(array);
+
         for (final boolean element : array) {
             if (element) {
                 return true;
@@ -1005,18 +986,9 @@ public class BooleanUtils {
      * @since 3.0.1
      */
     public static Boolean or(final Boolean... array) {
-        if (array == null) {
-            throw new IllegalArgumentException("The Array must not be null");
-        }
-        if (array.length == 0) {
-            throw new IllegalArgumentException("Array is empty");
-        }
-        try {
-            final boolean[] primitive = ArrayUtils.toPrimitive(array);
-            return or(primitive) ? Boolean.TRUE : Boolean.FALSE;
-        } catch (final NullPointerException ex) {
-            throw new IllegalArgumentException("The array must not contain any null elements");
-        }
+        validatesArrayInput(array);
+        final boolean[] primitive = toPrimitive(array);
+        return or(primitive) ? Boolean.TRUE : Boolean.FALSE;
     }
 
     /**
@@ -1034,13 +1006,7 @@ public class BooleanUtils {
      * @throws IllegalArgumentException if {@code array} is empty.
      */
     public static boolean xor(final boolean... array) {
-        // Validates input
-        if (array == null) {
-            throw new IllegalArgumentException("The Array must not be null");
-        }
-        if (array.length == 0) {
-            throw new IllegalArgumentException("Array is empty");
-        }
+        validatesArrayInput(array);
 
         // false if the neutral element of the xor operator
         boolean result = false;
@@ -1067,18 +1033,9 @@ public class BooleanUtils {
      * @throws IllegalArgumentException if {@code array} contains a {@code null}
      */
     public static Boolean xor(final Boolean... array) {
-        if (array == null) {
-            throw new IllegalArgumentException("The Array must not be null");
-        }
-        if (array.length == 0) {
-            throw new IllegalArgumentException("Array is empty");
-        }
-        try {
-            final boolean[] primitive = ArrayUtils.toPrimitive(array);
-            return xor(primitive) ? Boolean.TRUE : Boolean.FALSE;
-        } catch (final NullPointerException ex) {
-            throw new IllegalArgumentException("The array must not contain any null elements");
-        }
+        validatesArrayInput(array);
+        final boolean[] primitive = toPrimitive(array);
+        return xor(primitive) ? Boolean.TRUE : Boolean.FALSE;
     }
 
     /**
@@ -1096,6 +1053,49 @@ public class BooleanUtils {
             return 0;
         }
         return x ? 1 : -1;
+    }
+
+    /**
+     * <p>Validates an a array of boolean.</p>
+     * @param array the array to validate
+     * @throws IllegalArgumentException if {@code array} is {@code null}
+     * @throws IllegalArgumentException if {@code array} is empty.
+     */
+    private static void validatesArrayInput(boolean[] array) {
+        if (array == null) {
+            throw new IllegalArgumentException("The Array must not be null");
+        }
+        if (array.length == 0) {
+            throw new IllegalArgumentException("Array is empty");
+        }
+    }
+
+    /**
+     * <p>Validates an a array of {@link Boolean}.</p>
+     * @param array the array to validate
+     * @throws IllegalArgumentException if {@code array} is {@code null}
+     * @throws IllegalArgumentException if {@code array} is empty.
+     */
+    private static void validatesArrayInput(Boolean[] array) {
+        if (array == null) {
+            throw new IllegalArgumentException("The Array must not be null");
+        }
+        if (array.length == 0) {
+            throw new IllegalArgumentException("Array is empty");
+        }
+    }
+
+    /**
+     * <p>Converts an array of object Booleans to primitives.</p>
+     * @param array a {@link Boolean} array
+     * @throws IllegalArgumentException if {@code array} contains a {@code null}
+     */
+    private static boolean[] toPrimitive(Boolean[] array) {
+        try {
+            return ArrayUtils.toPrimitive(array);
+        } catch (final NullPointerException ex) {
+            throw new IllegalArgumentException("The array must not contain any null elements");
+        }
     }
 
 }
